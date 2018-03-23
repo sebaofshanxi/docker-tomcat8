@@ -1,0 +1,37 @@
+docker image build -t myubuntu:0.0.1 .
+
+docker build -t myubuntu:1.0.1 .
+
+docker run -dit --name webserver -p 8080:8080 -p 8009:8009 -v /Users/seba/test/docker/ubuntu/demo:/opt/tomcat/webapps -v /Users/seba/test/docker/ubuntu/logs:/opt/tomcat/logs -v /Users/seba/test/docker/ubuntu/common:/data/common myubuntu:0.0.1
+
+docker exec webserver /data/common/reload-service.sh ROOT
+
+
+
+
+
+/bin/catalina.sh£º
+export JAVA_OPTS="-server -Xms2048M -Xmx2048M"
+
+
+/conf/server.xml:
+      <Host name="localhost"  appBase="webapps"
+            unpackWARs="true" autoDeploy="true">
+<Context docBase="ROOT" path="/" reloadable="true">
+                <Parameter name="evn" value="qa" override="false"/>
+       </Context>
+        <Valve className="org.apache.catalina.valves.AccessLogValve" directory="logs"
+               prefix="localhost_access_log" suffix=".txt"
+               pattern="%h %l %u %t &quot;%r&quot; %s %b" />
+
+      </Host>
+    </Engine>
+  </Service>
+</Server>
+
+
+
+<Context docBase="ROOT" path="/" reloadable="true">
+                <Parameter name="evn" value="qa" override="false"/>
+       </Context>
+
